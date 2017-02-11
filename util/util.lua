@@ -37,10 +37,11 @@ end
 -- Preprocesses an image before passing it to a net
 -- Converts from RGB to BGR and rescales from [0,1] to [-1,1]
 function util.preprocess(img)
-    -- RGB to BGR
-    local perm = torch.LongTensor{3, 2, 1}
-    img = img:index(1, perm)
-    
+    if img:size(1) == 3 then
+        -- RGB to BGR
+        local perm = torch.LongTensor{3, 2, 1}
+        img = img:index(1, perm)
+    end
     -- [0,1] to [-1,1]
     img = img:mul(2):add(-1)
     
@@ -53,10 +54,11 @@ end
 
 -- Undo the above preprocessing.
 function util.deprocess(img)
-    -- BGR to RGB
-    local perm = torch.LongTensor{3, 2, 1}
-    img = img:index(1, perm)
-    
+    if img:size(1) == 3 then
+        -- BGR to RGB
+        local perm = torch.LongTensor{3, 2, 1}
+        img = img:index(1, perm)
+    end
     -- [-1,1] to [0,1]
     
     img = img:add(1):div(2)

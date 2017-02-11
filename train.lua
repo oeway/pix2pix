@@ -323,6 +323,8 @@ for k, v in ipairs(opt.display_plot) do
     end
 end
 
+local unpack = unpack or table.unpack
+
 -- display plot config
 local plot_config = {
   title = "Loss over time",

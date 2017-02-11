@@ -40,9 +40,13 @@ local preprocessAandB = function(imA, imB)
   imA = image.scale(imA, loadSize[2], loadSize[2])
   imB = image.scale(imB, loadSize[2], loadSize[2])
   local perm = torch.LongTensor{3, 2, 1}
-  imA = imA:index(1, perm)--:mul(256.0): brg, rgb
+  if imA:size(1) == 3 then
+    imA = imA:index(1, perm)--:mul(256.0): brg, rgb
+  end
   imA = imA:mul(2):add(-1)
-  imB = imB:index(1, perm)
+  if imB:size(1) == 3 then
+    imB = imB:index(1, perm)
+  end
   imB = imB:mul(2):add(-1)
 --   print(img:size())
   assert(imA:max()<=1,"A: badly scaled inputs")
@@ -79,7 +83,7 @@ end
 
 
 local function loadImageChannel(path)
-    local input = image.load(path, 3, 'float')
+    local input = image.load(path):type('torch.FloatTensor')
     input = image.scale(input, loadSize[2], loadSize[2])
 
     local oW = sampleSize[2]
@@ -119,7 +123,7 @@ end
 --local function loadImage
 
 local function loadImage(path)
-   local input = image.load(path, 3, 'float')
+   local input = image.load(path):type('torch.FloatTensor')
    local h = input:size(2)
    local w = input:size(3)
 
@@ -130,10 +134,12 @@ local function loadImage(path)
 end
 
 local function loadImageInpaint(path)
-  local imB = image.load(path, 3, 'float')
+  local imB = image.load(path):type('torch.FloatTensor')
   imB = image.scale(imB, loadSize[2], loadSize[2])
   local perm = torch.LongTensor{3, 2, 1}
-  imB = imB:index(1, perm)--:mul(256.0): brg, rgb
+  if imB:size(1) == 3 then
+      imB = imB:index(1, perm)--:mul(256.0): brg, rgb
+  end
   imB = imB:mul(2):add(-1)
   assert(imB:max()<=1,"A: badly scaled inputs")
   assert(imB:min()>=-1,"A: badly scaled inputs")

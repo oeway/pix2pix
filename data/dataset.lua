@@ -145,11 +145,7 @@ function dataset:__init(...)
    local wc = 'wc'
    local cut = 'cut'
    local find = 'find -H'  -- if folder name is symlink, do find inside it after dereferencing
-   if jit.os == 'OSX' then
-      wc = 'gwc'
-      cut = 'gcut'
-      find = 'gfind'
-   end
+
    ----------------------------------------------------------------------
    -- Options for the GNU find command
    local extensionList = {'jpg', 'png','JPG','PNG','JPEG', 'ppm', 'PPM', 'bmp', 'BMP'}
@@ -345,15 +341,16 @@ local function tableToOutput(self, dataTable, scalarTable)
    local quantity = #scalarTable
 --   print(dataTable[1]:())
    assert(dataTable[1]:dim() == 3)
---   print(quantity)
---   print(self.sampleSize[1])
---   print(self.sampleSize[2])
---   print(self.sampleSize[3])
+-- print(quantity)
+-- print(self.sampleSize[1])
+-- print(self.sampleSize[2])
+-- print(self.sampleSize[3])
    data = torch.Tensor(quantity,
 		       self.sampleSize[1], self.sampleSize[2], self.sampleSize[3])
 --	 print(data:size())
    scalarLabels = torch.LongTensor(quantity):fill(-1111)
    for i=1,#dataTable do
+--    print(dataTable[i]:size())
       data[i]:copy(dataTable[i])
       scalarLabels[i] = scalarTable[i]
    end
